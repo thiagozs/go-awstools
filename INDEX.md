@@ -313,7 +313,7 @@ Baseado em testes com arquivo de 1GB:
 
 - Issues: [GitHub Issues](link)
 - Discussões: [GitHub Discussions](link)
-- Email: seu-email@exemplo.com
+- Email: <seu-email@exemplo.com>
 - Docs: Este repositório
 
 ## Licença

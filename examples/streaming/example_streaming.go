@@ -9,7 +9,7 @@ import (
 	"sync/atomic"
 	"time"
 
-	"blog/pkg/awstools"
+	"github.com/thiagozs/go-awstools"
 )
 
 func main() {
@@ -27,8 +27,8 @@ func main() {
 		awstools.WithSessionToken(sessionToken),
 		awstools.WithEndpoint(endpoint),
 		awstools.WithDisableSSL(true),
-		awstools.WithAmountWorkersRLS(8),  // 8 workers paralelos
-		awstools.WithBufferLimit(1000),     // Buffer de 1000 linhas
+		awstools.WithAmountWorkersRLS(8), // 8 workers paralelos
+		awstools.WithBufferLimit(1000),   // Buffer de 1000 linhas
 	}
 
 	t, err := awstools.NewAWSTools(opts...)
@@ -68,12 +68,12 @@ func main() {
 
 	// Statistics
 	var (
-		processedLines   atomic.Int64
-		totalWords       atomic.Int64
-		totalChars       atomic.Int64
-		longestLine      atomic.Int64
-		shortestLine     atomic.Int64
-		linesWithLorem   atomic.Int64
+		processedLines    atomic.Int64
+		totalWords        atomic.Int64
+		totalChars        atomic.Int64
+		longestLine       atomic.Int64
+		shortestLine      atomic.Int64
+		linesWithLorem    atomic.Int64
 		errorsEncountered atomic.Int64
 	)
 
@@ -91,7 +91,7 @@ func main() {
 
 		// Update statistics
 		processedLines.Add(1)
-		
+
 		lineLen := int64(len(line))
 		totalChars.Add(lineLen)
 
@@ -154,7 +154,7 @@ func main() {
 	fmt.Println(strings.Repeat("=", 80))
 	log.Println("📊 STREAMING STATISTICS")
 	fmt.Println(strings.Repeat("=", 80))
-	
+
 	lines := processedLines.Load()
 	words := totalWords.Load()
 	chars := totalChars.Load()
@@ -171,7 +171,7 @@ func main() {
 	log.Printf("Shortest line:               %d chars", shortest)
 	log.Printf("Errors encountered:          %d", errors)
 	log.Printf("Processing time:             %v", elapsed)
-	
+
 	if lines > 0 {
 		log.Printf("Average line length:         %.2f chars", float64(chars)/float64(lines))
 		log.Printf("Average words per line:      %.2f", float64(words)/float64(lines))

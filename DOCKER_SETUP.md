@@ -19,8 +19,8 @@ docker-compose logs -f
 
 ### 1. MinIO (S3-Compatible Storage)
 
-- **API**: http://localhost:9000
-- **Console**: http://localhost:9001
+- **API**: <http://localhost:9000>
+- **Console**: <http://localhost:9001>
 - **Credenciais**:
   - User: `minioadmin`
   - Password: `minioadmin`
@@ -303,7 +303,7 @@ mc admin policy attach local readonly --user newuser
 
 MinIO expõe métricas em:
 
-- http://localhost:9000/minio/v2/metrics/cluster
+- <http://localhost:9000/minio/v2/metrics/cluster>
 
 ### Health Checks
 

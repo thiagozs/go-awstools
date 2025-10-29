@@ -5,16 +5,18 @@ import (
 	"fmt"
 	"log"
 	"time"
+
+	"github.com/thiagozs/go-awstools"
 )
 
 // Exemplo de uso com SDK v2
 
 func main() {
 	// Criar instância do AWSTools
-	tools, err := NewAWSTools(
-		WithAccessKeyID("your-access-key"),
-		WithSecretKey("your-secret-key"),
-		WithRegion("us-east-1"),
+	tools, err := awstools.NewAWSTools(
+		awstools.WithAccessKeyID("your-access-key"),
+		awstools.WithSecretKey("your-secret-key"),
+		awstools.WithRegion("us-east-1"),
 		// Para MinIO ou S3 customizado:
 		// WithEndpoint("http://localhost:9000"),
 		// WithDisableSSL(true),
@@ -155,18 +157,18 @@ func main() {
 	// ============================================
 	// EXEMPLO 12: Uso com MinIO (S3 compatível)
 	// ============================================
-	minioTools, err := NewAWSTools(
-		WithAccessKeyID("minioadmin"),
-		WithSecretKey("minioadmin"),
-		WithRegion("us-east-1"),
-		WithEndpoint("http://localhost:9000"),
-		WithDisableSSL(true),
+	minioTools, err := awstools.NewAWSTools(
+		awstools.WithAccessKeyID("minioadmin"),
+		awstools.WithSecretKey("minioadmin"),
+		awstools.WithRegion("us-east-1"),
+		awstools.WithEndpoint("http://localhost:9000"),
+		awstools.WithDisableSSL(true),
 	)
 	if err != nil {
 		log.Fatalf("Failed to create MinIO tools: %v", err)
 	}
 
-	buckets, err = minioTools.ListBuckets()
+	_, err = minioTools.ListBuckets()
 	if err != nil {
 		log.Printf("List MinIO buckets failed: %v", err)
 	}
@@ -198,12 +200,12 @@ func main() {
 // EXEMPLO 14: Processamento paralelo com streaming
 // ============================================
 func parallelStreamProcessing() {
-	tools, err := NewAWSTools(
-		WithAccessKeyID("your-key"),
-		WithSecretKey("your-secret"),
-		WithRegion("us-east-1"),
-		WithAmountWorkersRLS(8), // 8 workers paralelos
-		WithBufferLimit(1000),    // Buffer de 1000 linhas
+	tools, err := awstools.NewAWSTools(
+		awstools.WithAccessKeyID("your-key"),
+		awstools.WithSecretKey("your-secret"),
+		awstools.WithRegion("us-east-1"),
+		awstools.WithAmountWorkersRLS(8), // 8 workers paralelos
+		awstools.WithBufferLimit(1000),   // Buffer de 1000 linhas
 	)
 	if err != nil {
 		log.Fatal(err)

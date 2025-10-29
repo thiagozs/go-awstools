@@ -9,7 +9,7 @@ import (
 	"strings"
 	"time"
 
-	"blog/pkg/awstools"
+	"github.com/thiagozs/go-awstools"
 
 	utils "github.com/thiagozs/go-xutils"
 	"golang.org/x/text/cases"

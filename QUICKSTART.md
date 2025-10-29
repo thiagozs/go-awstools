@@ -21,7 +21,8 @@ docker run -d \
 docker exec minio-dev mc mb local/estellarx
 ```
 
-Acesse o console: http://localhost:9001
+Acesse o console: <http://localhost:9001>
+
 - User: `minioadmin`
 - Pass: `minioadmin`
 
@@ -276,9 +277,9 @@ tools, _ := awstools.NewAWSTools(
 
 ## Recursos
 
-- **Documentação AWS SDK v2**: https://aws.github.io/aws-sdk-go-v2/
-- **MinIO Docs**: https://min.io/docs/
-- **Go por Exemplo**: https://gobyexample.com/
+- **Documentação AWS SDK v2**: <https://aws.github.io/aws-sdk-go-v2/>
+- **MinIO Docs**: <https://min.io/docs/>
+- **Go por Exemplo**: <https://gobyexample.com/>
 
 ## Dicas de Performance
 
