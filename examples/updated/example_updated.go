@@ -17,11 +17,11 @@ import (
 )
 
 func main() {
-	accessKeyID := os.Getenv("AWS_ACCESS_KEY_ID")
-	secretAccessKey := os.Getenv("AWS_SECRET_ACCESS_KEY")
+	accessKeyID := envOrDefault("AWS_ACCESS_KEY_ID", "minioadmin")
+	secretAccessKey := envOrDefault("AWS_SECRET_ACCESS_KEY", "minioadmin")
 	sessionToken := os.Getenv("AWS_SESSION_TOKEN")
-	endpoint := os.Getenv("AWS_S3_ENDPOINT")
-	bucketName := "estellarx"
+	endpoint := envOrDefault("AWS_S3_ENDPOINT", "http://localhost:9000")
+	bucketName := envOrDefault("AWS_S3_BUCKET", "estellarx")
 
 	u := utils.New()
 
@@ -150,6 +150,13 @@ func main() {
 
 	fmt.Println(strings.Repeat("-", 80))
 	log.Println("✅ All operations completed successfully!")
+}
+
+func envOrDefault(key, fallback string) string {
+	if value := os.Getenv(key); value != "" {
+		return value
+	}
+	return fallback
 }
 
 func GenRandomLorem(wordCount int) string {

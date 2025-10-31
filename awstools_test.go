@@ -6,6 +6,8 @@ import (
 	"testing"
 	"time"
 
+	"github.com/aws/aws-sdk-go-v2/aws"
+	"github.com/aws/aws-sdk-go-v2/service/s3"
 	"github.com/aws/aws-sdk-go-v2/service/s3/types"
 )
 
@@ -26,6 +28,56 @@ func TestNewAWSTools(t *testing.T) {
 
 	if tools.queueWorkers != 4 {
 		t.Errorf("Expected 4 workers, got %d", tools.queueWorkers)
+	}
+}
+
+func TestUploadOptions(t *testing.T) {
+	input := &s3.PutObjectInput{}
+
+	metadata := map[string]string{
+		"foo": "bar",
+	}
+
+	opts := []UploadOption{
+		WithUploadContentType("image/png"),
+		WithUploadCacheControl("max-age=3600"),
+		WithUploadContentDisposition("inline"),
+		WithUploadContentEncoding("gzip"),
+		WithUploadContentLanguage("pt-BR"),
+		WithUploadMetadata(metadata),
+		WithUploadACL(types.ObjectCannedACLPublicRead),
+	}
+
+	for _, opt := range opts {
+		opt(input)
+	}
+
+	if ct := aws.ToString(input.ContentType); ct != "image/png" {
+		t.Fatalf("expected content type image/png, got %s", ct)
+	}
+
+	if cc := aws.ToString(input.CacheControl); cc != "max-age=3600" {
+		t.Fatalf("expected cache control max-age=3600, got %s", cc)
+	}
+
+	if cd := aws.ToString(input.ContentDisposition); cd != "inline" {
+		t.Fatalf("expected content disposition inline, got %s", cd)
+	}
+
+	if ce := aws.ToString(input.ContentEncoding); ce != "gzip" {
+		t.Fatalf("expected content encoding gzip, got %s", ce)
+	}
+
+	if cl := aws.ToString(input.ContentLanguage); cl != "pt-BR" {
+		t.Fatalf("expected content language pt-BR, got %s", cl)
+	}
+
+	if input.ACL != types.ObjectCannedACLPublicRead {
+		t.Fatalf("expected ACL public-read, got %s", input.ACL)
+	}
+
+	if val, ok := input.Metadata["foo"]; !ok || val != "bar" {
+		t.Fatalf("expected metadata foo=bar, got %v", input.Metadata)
 	}
 }
 

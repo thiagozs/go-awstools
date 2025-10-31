@@ -107,10 +107,18 @@ func (a *AWSTools) ResetLines(ref string) {
 }
 
 func (a *AWSTools) UploadFileToS3(bucket, fileName, filePath string) error {
-	return a.UploadFileToS3WithContext(context.Background(), bucket, fileName, filePath)
+	return a.UploadFileToS3WithOptions(bucket, fileName, filePath)
 }
 
 func (a *AWSTools) UploadFileToS3WithContext(ctx context.Context, bucket, fileName, filePath string) error {
+	return a.UploadFileToS3WithContextAndOptions(ctx, bucket, fileName, filePath)
+}
+
+func (a *AWSTools) UploadFileToS3WithOptions(bucket, fileName, filePath string, opts ...UploadOption) error {
+	return a.UploadFileToS3WithContextAndOptions(context.Background(), bucket, fileName, filePath, opts...)
+}
+
+func (a *AWSTools) UploadFileToS3WithContextAndOptions(ctx context.Context, bucket, fileName, filePath string, opts ...UploadOption) error {
 	file, err := os.Open(filePath)
 	if err != nil {
 		return fmt.Errorf("failed to open file %q, %v", filePath, err)
@@ -118,11 +126,20 @@ func (a *AWSTools) UploadFileToS3WithContext(ctx context.Context, bucket, fileNa
 	defer file.Close()
 
 	uploader := manager.NewUploader(a.s3Client)
-	_, err = uploader.Upload(ctx, &s3.PutObjectInput{
+
+	input := &s3.PutObjectInput{
 		Bucket: aws.String(bucket),
 		Key:    aws.String(fileName),
 		Body:   file,
-	})
+	}
+
+	for _, opt := range opts {
+		if opt != nil {
+			opt(input)
+		}
+	}
+
+	_, err = uploader.Upload(ctx, input)
 
 	return err
 }
